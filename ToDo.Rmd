@@ -1,0 +1,16 @@
+---
+title: "ToDo"
+output:
+  pdf_document: default
+---
+
+## Funkcje:
+### dw = pochodna(w)
+Funckja przyjmuje wielomian w formie wektora i zwraca jego pochodna tez w formie wektora.\
+Przyklad: $3x^2 - 4x + 5$ → w=[3,-4,5] → dw=[6,-4] -> $6x - 4$
+
+### [x2] = `MetodaHalleya`(w, x0, N)
+Funkcja przyjmuje wielomian `w` formie woktora, punkt startowy w dziedzinie zespolonej `x0` oraz naturalna liczbe iteracji `N`. Zwraca obliczone miejsce zerowe `x2`. Jesli nie udalo sie znalesc, informuje komunikatem.\
+
+**Problem**:\
+Funkcja powinna zapisywac w kazdej iteracjii wartosc `x0`, aby mozba bylo przesledzic jego droge.\
