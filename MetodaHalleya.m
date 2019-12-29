@@ -1,31 +1,44 @@
-function [x2] = MetodaHalleya(w, x0, N)
-% Metoda Halley'a wyznaczajaca zera wielomianu postaci np. w=[3,2,1]
-% oblicza: x1 = x0 - w(x0)/dw(x0)*(1 - w(x0)*ddw(x0)/(2*(dw(x0))^2)
-    % gdzie w(x0) oznacza wartosc wielomianu w punkcie x0,
-    % dw(x0) wartosc pochodnej wielomianu w punkcie x0,
-    % dd2(x0) wartosc drugiej pochodnej wielomianu w punkcie x0.
-% Metoda jest powtarzana N razy
+function [x, k, w_x] = MetodaHalleya(p, x0, tol, max_iter)
 
-i = 1;
-error = sqrt(eps);         %dokladnosc
-xpocz = x0;             % wartosc poczatkowa
+% Wyznaczanie zera wielomianu metod¹ Halleya'a
+% p - wspolczynniki wielomianu np. p =[3,2,1], czyli w(x) = 3x^2 + 2x + 1
+% x0 - pocz¹tkowe przybli¿enie
+% tol - dok³adnoœæ
+% max_iter - maksymalna iloœæ iteracji
+% Metoda zwraca:
+% x - przybli¿enie
+% i - liczba wykonanych iteracji
+% w_x=w(x), gdzie x jest obliczonym przybli¿eniem zera w(x)
 
-dw = pochodna(w);       %pochodne wielomianow
-ddw = pochodna(dw);
+k = 0;
+dx = tol + 1;
+xpocz = x0;             % wartoœæ pocz¹tkowa
 
-while i <= N
-    x1 = x0 - (polyval(w, x0)/polyval(dw,x0))*(1 - (polyval(w,x0)*polyval(ddw,x0)/polyval(dw,x0)^2))^(-1);     %Implementation og Halleys Methof (i.e. g(x)). 
-  
-    if (abs(x1 - x0)/abs(x0)) < error                 % dokladnosc jest wystarczajaca
-        x2 = x1;
+dw = pochodna(p);       % I pochodna wielomianu
+ddw = pochodna(dw);     % II pochodna wielomianu
+
+while abs(dx) > tol && k <= max_iter
+    w = polyval(p,x0);
+    if abs(w) <= tol               % dok³adnoœæ jest wystarczaj¹ca
+        x = x0;
+        w_x = w;
         return
     end
- 
-    i = i + 1;
-    x0 = x1;             % aktualizuj x0
+    dzielnik = 2*polyval(dw,x0)^2 - (w*polyval(ddw,x0));
+    
+    if dzielnik == 0
+        disp(' Dzielenie przez zero! ');
+        return
+    end
+    
+    dx = (2*w*polyval(dw, x0))/dzielnik;
+    x1 = x0 - dx;        % obliczanie nastêpnego przybli¿enia 
+    k = k + 1;           % aktualizacja i
+    x0 = x1;             % aktualizacja x0
 end
 
-fprintf('Nie znaleziono rozwiazania w %d iteraciach zaczynajac od %d na wymaganej precyzjii wynoszacej: %d \n', N, xpocz, error);
-
+fprintf('Nie znaleziono rozwi¹zania w %d iteracjach, zaczynaj¹c od %d z wymagan¹ precyzj¹ wynosz¹cej: %d \n', max_iter, xpocz, tol);
+k = 31;         % bo zamiar jest taki, aby wszystkie pierwiastki nie znalezione do 30 iteracji by³y kolorowane na jeden kolor  
+x = NaN;
 end
 
