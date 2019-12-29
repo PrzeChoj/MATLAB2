@@ -7,6 +7,8 @@ function [B,C,D] = HalleyMatrix(p, A, tol, max_iter)
 % max_iter - maksymalna liczba iteracji
 % Zwracane s¹ macierze B i C, które zawieraj¹ odpowiednio liczbê iteracji -
 % szybkoœæ zbie¿noœci albo do jakiego pierwiastka jest zbie¿ny
+% dodatkowo zwraca macierz D, ktora oznacza zamianê pierwaistków z C na
+% liczby
 
 [n,m] = size(A);
 B = zeros(n,m);
